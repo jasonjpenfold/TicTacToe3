@@ -21,19 +21,37 @@ struct ContentView: View {
                 print(won)
             }
           */
-            Grid{
-                ForEach(0..<3, id: \.self){
+            if model.gameState == .instructions{
+                InstructionsView()
+                PlayButtonView()
+            }
+            
+            if model.gameState == .playing{
+                Grid{
+                    ForEach(0..<3, id: \.self){
                         row in
                         GridRow{
                             ForEach(0..<3, id: \.self){
-                            col in
-                            SquareView(row: row, col: col)
-                           
+                                col in
+                                SquareView(row: row, col: col)
+                                    .onTapGesture(perform: {
+                                        model.squareClicked(position: (row * 3) + col )
+                                    })
+                                
+                            }
                         }
                     }
                 }
-                            }
+            }
             
+            if model.gameState == .draw{
+                DrawView()
+                PlayButtonView()
+            }
+            if model.gameState == .winner(winner: .x) || model.gameState == .winner(winner: .o){
+                WinnerView()
+                PlayButtonView()
+            }
         }
     }
 }

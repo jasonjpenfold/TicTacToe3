@@ -1,8 +1,18 @@
 import SwiftUI
 
-enum Player{
+enum Player: CustomStringConvertible{
+    var description: String{
+        switch self {
+        case .x:
+            return "X"
+        case .o:
+            return "O"
+        }
+    }
+
     case x 
     case o 
+    
 }
 
 struct Square{
@@ -71,6 +81,23 @@ class Game{
         }
         
     }
+    func resetGame(){
+        self.playerTurn = .x
+        self.gameState = .instructions
+        self.board.removeAll()
+        for i in 0...8{
+            self.board.append(Square(position: i))
+        }
+        
+    }
+    func startGame(){
+        if gameState != .instructions{
+            resetGame()
+            return
+        }
+        self.gameState = .playing
+    }
+    
     func setSquareAsPlayer(player: Player, position: Int){
         board[position].setPlayer(player: player)
     }
